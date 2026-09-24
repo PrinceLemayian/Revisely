@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 const envSchema = z.object({
   DATABASE_URL: z.string().min(1).default("postgresql://postgres:postgres@localhost:5432/revisely?schema=public"),
   AUTH_SECRET: z.string().min(24).default("development-secret-change-me-now"),
