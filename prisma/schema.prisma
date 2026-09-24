@@ -1,0 +1,219 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum UserRole {
+  student
+  admin
+}
+
+enum ResourceStatus {
+  draft
+  published
+}
+
+enum ResourceReviewStatus {
+  pending
+  approved
+  rejected
+  flagged
+}
+
+enum AccessAction {
+  view
+  download
+}
+
+enum ChatRole {
+  user
+  assistant
+}
+
+model School {
+  id          String       @id @default(cuid())
+  name        String
+  code        String       @unique
+  departments Department[]
+  users       User[]
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+
+  @@map("schools")
+}
+
+model Department {
+  id        String    @id @default(cuid())
+  schoolId  String    @map("school_id")
+  name      String
+  code      String
+  school    School    @relation(fields: [schoolId], references: [id], onDelete: Restrict)
+  programs  Program[]
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  @@unique([schoolId, code])
+  @@map("departments")
+}
+
+model Program {
+  id           String     @id @default(cuid())
+  departmentId String     @map("department_id")
+  name         String
+  code         String
+  department   Department @relation(fields: [departmentId], references: [id], onDelete: Restrict)
+  units        Unit[]
+  users        User[]
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @updatedAt @map("updated_at")
+
+  @@unique([departmentId, code])
+  @@map("programs")
+}
+
+model Unit {
+  id          String     @id @default(cuid())
+  programId   String     @map("program_id")
+  name        String
+  code        String     @unique
+  description String?
+  program     Program    @relation(fields: [programId], references: [id], onDelete: Restrict)
+  resources   Resource[]
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  @@map("units")
+}
+
+model ResourceType {
+  id        String     @id @default(cuid())
+  name      String
+  slug      String     @unique
+  resources Resource[]
+
+  @@map("resource_types")
+}
+
+model AcademicYear {
+  id        String     @id @default(cuid())
+  label     String     @unique
+  resources Resource[]
+
+  @@map("academic_years")
+}
+
+model Semester {
+  id        String     @id @default(cuid())
+  name      String     @unique
+  resources Resource[]
+
+  @@map("semesters")
+}
+
+model User {
+  id             String             @id @default(cuid())
+  name           String
+  email          String             @unique
+  passwordHash   String             @map("password_hash")
+  role           UserRole           @default(student)
+  schoolId       String?            @map("school_id")
+  programId      String?            @map("program_id")
+  school         School?            @relation(fields: [schoolId], references: [id], onDelete: SetNull)
+  program        Program?           @relation(fields: [programId], references: [id], onDelete: SetNull)
+  uploads        Resource[]         @relation("UploadedResources")
+  bookmarks      Bookmark[]
+  accessLogs     ResourceAccessLog[]
+  conversations  ChatConversation[]
+  createdAt      DateTime           @default(now()) @map("created_at")
+
+  @@map("users")
+}
+
+model Resource {
+  id              String              @id @default(cuid())
+  title           String
+  description     String
+  unitId          String              @map("unit_id")
+  resourceTypeId  String              @map("resource_type_id")
+  academicYearId  String              @map("academic_year_id")
+  semesterId      String?             @map("semester_id")
+  storageKey      String              @unique @map("storage_key")
+  fileName        String              @map("file_name")
+  fileType        String              @map("file_type")
+  fileSizeBytes   Int                 @map("file_size_bytes")
+  uploadedById    String              @map("uploaded_by")
+  status          ResourceStatus      @default(draft)
+  reviewStatus    ResourceReviewStatus @default(approved) @map("review_status")
+  reviewReason    String?             @map("review_reason")
+  reviewedAt      DateTime?           @map("reviewed_at")
+  downloadCount   Int                 @default(0) @map("download_count")
+  viewCount       Int                 @default(0) @map("view_count")
+  searchVector    Unsupported("tsvector")? @map("search_vector")
+  unit            Unit                @relation(fields: [unitId], references: [id], onDelete: Restrict)
+  resourceType    ResourceType        @relation(fields: [resourceTypeId], references: [id], onDelete: Restrict)
+  academicYear    AcademicYear        @relation(fields: [academicYearId], references: [id], onDelete: Restrict)
+  semester        Semester?           @relation(fields: [semesterId], references: [id], onDelete: SetNull)
+  uploadedBy      User                @relation("UploadedResources", fields: [uploadedById], references: [id], onDelete: Restrict)
+  bookmarks       Bookmark[]
+  accessLogs      ResourceAccessLog[]
+  createdAt       DateTime            @default(now()) @map("created_at")
+  updatedAt       DateTime            @updatedAt @map("updated_at")
+
+  @@index([unitId, resourceTypeId, academicYearId])
+  @@index([status, createdAt])
+  @@index([reviewStatus, createdAt])
+  @@map("resources")
+}
+
+model Bookmark {
+  id         String   @id @default(cuid())
+  userId     String   @map("user_id")
+  resourceId String   @map("resource_id")
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@unique([userId, resourceId])
+  @@map("bookmarks")
+}
+
+model ResourceAccessLog {
+  id         String       @id @default(cuid())
+  resourceId String       @map("resource_id")
+  userId     String?      @map("user_id")
+  action     AccessAction
+  resource   Resource     @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  user       User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  accessedAt DateTime     @default(now()) @map("accessed_at")
+
+  @@index([resourceId, accessedAt])
+  @@map("resource_access_log")
+}
+
+model ChatConversation {
+  id        String        @id @default(cuid())
+  userId    String        @map("user_id")
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages  ChatMessage[]
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @updatedAt @map("updated_at")
+
+  @@map("chat_conversations")
+}
+
+model ChatMessage {
+  id                   String           @id @default(cuid())
+  conversationId        String           @map("conversation_id")
+  role                 ChatRole
+  content              String
+  retrievedResourceIds Json?            @map("retrieved_resource_ids")
+  conversation         ChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  createdAt            DateTime         @default(now()) @map("created_at")
+
+  @@map("chat_messages")
+}
