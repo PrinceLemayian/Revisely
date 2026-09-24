@@ -1,14 +1,23 @@
 import { z } from "zod";
 
 const envSchema = z.object({
-  DATABASE_URL: z.string().min(1).default("postgresql://postgres:postgres@localhost:5432/revisely?schema=public"),
+  DATABASE_URL: z
+    .string()
+    .min(1)
+    .default(
+      "postgresql://postgres:postgres@localhost:5432/revisely?schema=public",
+    ),
   AUTH_SECRET: z.string().min(24).default("development-secret-change-me-now"),
   STORAGE_PROVIDER: z.enum(["local", "s3", "supabase"]).default("local"),
   LOCAL_UPLOAD_DIR: z.string().default("./uploads"),
   SUPABASE_URL: z.string().url().optional(),
   SUPABASE_SERVICE_ROLE_KEY: z.string().optional(),
   SUPABASE_STORAGE_BUCKET: z.string().default("resources"),
-  MAX_UPLOAD_BYTES: z.coerce.number().int().positive().default(15 * 1024 * 1024),
+  MAX_UPLOAD_BYTES: z.coerce
+    .number()
+    .int()
+    .positive()
+    .default(15 * 1024 * 1024),
   AI_PROVIDER: z.enum(["demo", "openai", "groq"]).default("demo"),
   OPENAI_API_KEY: z.string().optional(),
   OPENAI_MODEL: z.string().default("gpt-4o-mini"),
@@ -22,7 +31,7 @@ const envSchema = z.object({
     .enum(["true", "false"])
     .default("false")
     .transform((value) => value === "true"),
-  APP_BASE_URL: z.string().url().default("http://localhost:3000")
+  APP_BASE_URL: z.string().url().default("http://localhost:3000"),
 });
 
 export const env = envSchema.parse({
@@ -44,5 +53,5 @@ export const env = envSchema.parse({
   GROQ_TOP_P: process.env.GROQ_TOP_P,
   GROQ_REASONING_EFFORT: process.env.GROQ_REASONING_EFFORT,
   GROQ_STREAM: process.env.GROQ_STREAM,
-  APP_BASE_URL: process.env.APP_BASE_URL
+  APP_BASE_URL: process.env.APP_BASE_URL,
 });
