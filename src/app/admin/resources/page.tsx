@@ -2,13 +2,13 @@ import { requireAdmin } from "@/lib/auth";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { getTaxonomy } from "@/repositories/taxonomy";
-import { resourceInclude } from "@/repositories/resources";
+import { resourceCardSelect } from "@/repositories/resources";
 import { AdminResourceForm } from "@/components/admin-resource-form";
 import { ResourceCard } from "@/components/resource-card";
 import { toResourceCard } from "@/lib/resource-presenter";
 
 async function getResources() {
-  return prisma.resource.findMany({ include: resourceInclude, orderBy: { createdAt: "desc" }, take: 12 });
+  return prisma.resource.findMany({ select: resourceCardSelect, orderBy: { createdAt: "desc" }, take: 12 });
 }
 
 export default async function AdminResourcesPage() {

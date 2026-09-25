@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { resourceInclude } from "@/repositories/resources";
+import { resourceCardSelect } from "@/repositories/resources";
 import { ResourceCard } from "@/components/resource-card";
 import { toResourceCard } from "@/lib/resource-presenter";
 
@@ -13,7 +13,7 @@ async function getUnit(id: string) {
       program: { include: { department: { include: { school: true } } } },
       resources: {
         where: { status: "published" },
-        include: resourceInclude,
+        select: resourceCardSelect,
         orderBy: [{ resourceType: { name: "asc" } }, { academicYear: { label: "desc" } }]
       }
     }

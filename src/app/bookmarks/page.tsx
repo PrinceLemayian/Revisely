@@ -1,13 +1,13 @@
 import { requireUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { ResourceCard } from "@/components/resource-card";
-import { resourceInclude } from "@/repositories/resources";
+import { resourceCardSelect } from "@/repositories/resources";
 import { toResourceCard } from "@/lib/resource-presenter";
 
 async function getBookmarks(userId: string) {
   return prisma.bookmark.findMany({
     where: { userId },
-    include: { resource: { include: resourceInclude } },
+    include: { resource: { select: resourceCardSelect } },
     orderBy: { createdAt: "desc" }
   });
 }

@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { NextRequest } from "next/server";
+import { cache } from "react";
 import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import { prisma } from "@/lib/prisma";
 import { env } from "@/config/env";
@@ -52,10 +53,11 @@ export async function getSessionUserFromToken(token?: string | null): Promise<Se
   return user;
 }
 
-export async function getSessionUser(): Promise<SessionUser | null> {
+// Reuse the authenticated user across the header, layout, and page render.
+export const getSessionUser = cache(async function getSessionUser(): Promise<SessionUser | null> {
   const cookieStore = await cookies();
   return getSessionUserFromToken(cookieStore.get(SESSION_COOKIE)?.value);
-}
+});
 
 export async function getRequestUser(request: NextRequest): Promise<SessionUser | null> {
   return getSessionUserFromToken(request.cookies.get(SESSION_COOKIE)?.value);

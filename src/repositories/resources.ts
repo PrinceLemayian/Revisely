@@ -19,6 +19,64 @@ export const resourceInclude = {
   }
 } satisfies Prisma.ResourceInclude;
 
+// Keep card/list payloads limited to fields rendered by ResourceCard.
+export const resourceCardSelect = {
+  id: true,
+  resourceTypeId: true,
+  academicYearId: true,
+  title: true,
+  description: true,
+  fileType: true,
+  fileSizeBytes: true,
+  downloadCount: true,
+  viewCount: true,
+  createdAt: true,
+  resourceType: { select: { name: true, slug: true } },
+  academicYear: { select: { label: true } },
+  semester: { select: { name: true } },
+  unit: {
+    select: {
+      id: true,
+      name: true,
+      code: true,
+      program: {
+        select: {
+          name: true,
+          department: {
+            select: {
+              name: true,
+              school: { select: { name: true } }
+            }
+          }
+        }
+      }
+    }
+  }
+} satisfies Prisma.ResourceSelect;
+
+// Limit review queue hydration to the fields displayed by the review screen.
+export const resourceReviewSelect = {
+  id: true,
+  title: true,
+  description: true,
+  fileName: true,
+  fileType: true,
+  storageKey: true,
+  createdAt: true,
+  reviewStatus: true,
+  reviewReason: true,
+  reviewedAt: true,
+  uploadedBy: { select: { name: true } },
+  unit: {
+    select: {
+      code: true,
+      name: true,
+      program: { select: { department: { select: { school: { select: { name: true } } } } } }
+    }
+  },
+  resourceType: { select: { name: true } }
+} satisfies Prisma.ResourceSelect;
+
 export async function getPublishedResource(id: string) {
   return prisma.resource.findFirst({
     where: { id, status: "published" },
@@ -50,7 +108,7 @@ export async function getRelatedResources(resourceId: string, unitId: string, re
       status: "published",
       OR: [{ unitId }, { resourceTypeId }]
     },
-    include: resourceInclude,
+    select: resourceCardSelect,
     take: 4,
     orderBy: [{ unitId: "asc" }, { createdAt: "desc" }]
   });

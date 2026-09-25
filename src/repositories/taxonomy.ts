@@ -1,6 +1,8 @@
+import { cache } from "react";
 import { prisma } from "@/lib/prisma";
 
-export async function getTaxonomy() {
+// Deduplicate taxonomy reads shared by multiple server components in one request.
+export const getTaxonomy = cache(async function getTaxonomy() {
   const [schools, resourceTypes, academicYears, semesters] = await Promise.all([
     prisma.school.findMany({
       include: {
@@ -23,4 +25,4 @@ export async function getTaxonomy() {
     prisma.semester.findMany({ orderBy: { name: "asc" } })
   ]);
   return { schools, resourceTypes, academicYears, semesters };
-}
+});

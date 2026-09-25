@@ -1,8 +1,8 @@
-import { resourceInclude } from "@/repositories/resources";
+import { resourceCardSelect } from "@/repositories/resources";
 import { ResourceSearchResult } from "@/services/search/types";
 import { Prisma } from "@prisma/client";
 
-export type IncludedResource = Prisma.ResourceGetPayload<{ include: typeof resourceInclude }>;
+export type IncludedResource = Prisma.ResourceGetPayload<{ select: typeof resourceCardSelect }>;
 
 export function toResourceCard(resource: IncludedResource): ResourceSearchResult {
   return {

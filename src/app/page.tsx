@@ -2,10 +2,8 @@ import Link from "next/link";
 import { ArrowRight, BookOpen, Bot, CheckCircle2, FileSearch, GraduationCap, Search, ShieldCheck, Sparkles } from "lucide-react";
 import { SearchForm } from "@/components/search-form";
 import { ButtonLink } from "@/components/ui/button";
-import { getTaxonomy } from "@/repositories/taxonomy";
 
 export default async function HomePage() {
-  const taxonomy = await getTaxonomy();
   return (
     <main className="overflow-hidden">
       <section className="relative border-b border-slate-200 bg-white">

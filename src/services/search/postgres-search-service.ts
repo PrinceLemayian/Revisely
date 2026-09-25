@@ -1,5 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
+import { resourceCardSelect } from "@/repositories/resources";
 import { ResourceFilters, ResourceSearchResult, SearchResponse, SearchService } from "@/services/search/types";
 
 function normalizeCourseCode(input: string) {
@@ -56,24 +57,7 @@ function buildWhere(query: string, filters: ResourceFilters) {
   return { AND: and };
 }
 
-const includeResource = {
-  resourceType: true,
-  academicYear: true,
-  semester: true,
-  unit: {
-    include: {
-      program: {
-        include: {
-          department: {
-            include: { school: true }
-          }
-        }
-      }
-    }
-  }
-} satisfies Prisma.ResourceInclude;
-
-function mapResource(resource: Prisma.ResourceGetPayload<{ include: typeof includeResource }>): ResourceSearchResult {
+function mapResource(resource: Prisma.ResourceGetPayload<{ select: typeof resourceCardSelect }>): ResourceSearchResult {
   return {
     id: resource.id,
     title: resource.title,
@@ -104,7 +88,7 @@ export class PostgresSearchService implements SearchService {
       prisma.resource.count({ where }),
       prisma.resource.findMany({
         where,
-        include: includeResource,
+        select: resourceCardSelect,
         orderBy,
         skip: (page - 1) * pageSize,
         take: pageSize

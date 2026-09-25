@@ -2,20 +2,20 @@ import { requireUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { SearchForm } from "@/components/search-form";
 import { ResourceCard } from "@/components/resource-card";
-import { resourceInclude } from "@/repositories/resources";
+import { resourceCardSelect } from "@/repositories/resources";
 import { toResourceCard } from "@/lib/resource-presenter";
 
 async function getDashboardData(userId: string) {
   const [recentLogs, bookmarks] = await Promise.all([
     prisma.resourceAccessLog.findMany({
       where: { userId },
-      include: { resource: { include: resourceInclude } },
+      include: { resource: { select: resourceCardSelect } },
       orderBy: { accessedAt: "desc" },
       take: 6
     }),
     prisma.bookmark.findMany({
       where: { userId },
-      include: { resource: { include: resourceInclude } },
+      include: { resource: { select: resourceCardSelect } },
       orderBy: { createdAt: "desc" },
       take: 4
     })

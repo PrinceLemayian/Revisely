@@ -1,13 +1,13 @@
 import { requireAdmin } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { resourceInclude } from "@/repositories/resources";
+import { resourceCardSelect } from "@/repositories/resources";
 import { ResourceCard } from "@/components/resource-card";
 import { toResourceCard } from "@/lib/resource-presenter";
 
 async function getStats() {
   const [mostDownloaded, recentUploads, zeroDownloads, logCount] = await Promise.all([
-    prisma.resource.findMany({ include: resourceInclude, orderBy: { downloadCount: "desc" }, take: 6 }),
-    prisma.resource.findMany({ include: resourceInclude, orderBy: { createdAt: "desc" }, take: 6 }),
+    prisma.resource.findMany({ select: resourceCardSelect, orderBy: { downloadCount: "desc" }, take: 6 }),
+    prisma.resource.findMany({ select: resourceCardSelect, orderBy: { createdAt: "desc" }, take: 6 }),
     prisma.resource.count({ where: { downloadCount: 0 } }),
     prisma.resourceAccessLog.count()
   ]);
