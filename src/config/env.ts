@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+=======
+import { z } from "zod";
+
+>>>>>>> 43b21977a8ca47e7e2f34c10376e4ef36a81335a
 const envSchema = z.object({
   DATABASE_URL: z.string().min(1).default("postgresql://postgres:postgres@localhost:5432/revisely?schema=public"),
   AUTH_SECRET: z.string().min(24).default("development-secret-change-me-now"),
@@ -12,6 +17,7 @@ const envSchema = z.object({
   OPENAI_MODEL: z.string().default("gpt-4o-mini"),
   GROQ_API_KEY: z.string().optional(),
     GROQ_MODEL: z.string().default("llama-3.1-8b-instant"),
+  GROQ_MODEL: z.string().default("llama-3.1-8b-instant"),
   GROQ_TEMPERATURE: z.coerce.number().min(0).max(2).default(0.2),
   GROQ_MAX_TOKENS: z.coerce.number().int().positive().default(2048),
   GROQ_TOP_P: z.coerce.number().min(0).max(1).default(1),
@@ -43,4 +49,5 @@ export const env = envSchema.parse({
   GROQ_REASONING_EFFORT: process.env.GROQ_REASONING_EFFORT,
   GROQ_STREAM: process.env.GROQ_STREAM,
   APP_BASE_URL: process.env.APP_BASE_URL
+});
 });

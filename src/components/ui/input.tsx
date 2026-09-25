@@ -1,4 +1,4 @@
-import { InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes } from "react";
+ import { InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes } from "react";
 import { clsx } from "clsx";
 
 const fieldClass =
