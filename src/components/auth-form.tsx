@@ -30,8 +30,14 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
       setError(json?.error ?? "Something went wrong.");
       return;
     }
-    router.push("/dashboard");
-    router.refresh();
+    const json = await response.json().catch(() => null);
+    const role = json?.user?.role;
+    if (role !== "admin" && role !== "student") {
+      setError("Login succeeded, but the account role could not be determined.");
+      return;
+    }
+    // Replace the login route after the cookie is set; refreshing here can race the navigation.
+    router.replace(role === "admin" ? "/admin" : "/dashboard");
   }
 
   return (
