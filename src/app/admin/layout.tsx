@@ -12,7 +12,15 @@ export default async function AdminLayout({ children }: Readonly<{ children: Rea
         <div className="border-b border-slate-200 bg-white px-4 py-3 lg:hidden">
           <details>
             <summary className="flex cursor-pointer list-none items-center justify-between text-sm font-semibold text-ink [&::-webkit-details-marker]:hidden"><span className="flex items-center gap-2"><Menu size={18} /> Admin workspace</span><span className="text-xs text-slate-500">{user.name}</span></summary>
-            <nav className="mt-3 grid gap-1 border-t border-slate-100 pt-3 text-sm"><Link href="/admin">Dashboard</Link><Link href="/admin/review">Pending review</Link><Link href="/admin/taxonomy">Units & taxonomy</Link><Link href="/admin/resources">Resources</Link><Link href="/admin/stats">Analytics</Link><Link href="/">Back to Revisely</Link></nav>
+            <nav className="mt-3 grid gap-1 border-t border-slate-100 pt-3 text-sm font-medium text-slate-700">
+              <Link href="/admin" className="focus-ring rounded-lg px-3 py-2.5 hover:bg-mint hover:text-spruce">Dashboard</Link>
+              <Link href="/admin/review" className="focus-ring rounded-lg px-3 py-2.5 hover:bg-mint hover:text-spruce">Pending review</Link>
+              <Link href="/admin/taxonomy" className="focus-ring rounded-lg px-3 py-2.5 hover:bg-mint hover:text-spruce">Units & taxonomy</Link>
+              <Link href="/admin/resources" className="focus-ring rounded-lg px-3 py-2.5 hover:bg-mint hover:text-spruce">Resources</Link>
+              <Link href="/admin/stats" className="focus-ring rounded-lg px-3 py-2.5 hover:bg-mint hover:text-spruce">Analytics</Link>
+              <Link href="/admin/users" className="focus-ring rounded-lg px-3 py-2.5 hover:bg-mint hover:text-spruce">Users</Link>
+              <Link href="/" className="focus-ring rounded-lg px-3 py-2.5 text-slate-500 hover:bg-slate-100">Back to Revisely</Link>
+            </nav>
           </details>
         </div>
         {children}
