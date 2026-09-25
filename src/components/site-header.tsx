@@ -3,6 +3,7 @@ import { BookOpen, Bot, Gauge, Search, ShieldCheck, Sparkles } from "lucide-reac
 import { getSessionUser } from "@/lib/auth";
 import { ButtonLink } from "@/components/ui/button";
 import { LogoutButton } from "@/components/logout-button";
+import { MobileNav } from "@/components/mobile-nav";
 
 export async function SiteHeader() {
   const user = await getSessionUser();
@@ -30,15 +31,18 @@ export async function SiteHeader() {
         <div className="flex items-center gap-2">
           {user ? (
             <>
-              <ButtonLink href="/dashboard" variant="secondary"><Sparkles size={15} /> {user.name.split(" ")[0]}</ButtonLink>
-              <LogoutButton />
+              <ButtonLink href="/dashboard" variant="secondary" className="hidden sm:inline-flex"><Sparkles size={15} /> {user.name.split(" ")[0]}</ButtonLink>
+              <div className="hidden lg:block">
+                <LogoutButton />
+              </div>
             </>
           ) : (
             <>
               <ButtonLink href="/login" variant="ghost" className="hidden sm:inline-flex">Sign in</ButtonLink>
-              <ButtonLink href="/register">Get started</ButtonLink>
+              <ButtonLink href="/register" className="hidden sm:inline-flex">Get started</ButtonLink>
             </>
           )}
+          <MobileNav role={user?.role ?? null} isAuthenticated={Boolean(user)} />
         </div>
       </div>
     </header>
