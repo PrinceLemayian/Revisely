@@ -68,10 +68,17 @@ tests                   Unit and key-flow tests
 
 Open http://localhost:3000.
 
-Seeded accounts:
+Seed credentials are supplied only through environment variables before running the seed. They are intentionally not stored in this repository:
 
-- Student: student@revisely.test / password123
-- Admin: admin@revisely.test / password123
+```powershell
+$env:DEMO_ADMIN_EMAIL = "your-admin-email@example.com"
+$env:DEMO_ADMIN_PASSWORD = "use-a-new-admin-password"
+$env:DEMO_STUDENT_EMAIL = "your-student-email@example.com"
+$env:DEMO_STUDENT_PASSWORD = "use-a-new-student-password"
+npm run db:seed
+```
+
+If the email variables are omitted, the seed uses `admin@revisely.test` and `student@revisely.test` and resets their passwords to the supplied values. The seed also restores their expected roles.
 
 ## Environment Variables
 
