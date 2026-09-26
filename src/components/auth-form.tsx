@@ -1,14 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { ArrowRight, ShieldCheck, UserRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export function AuthForm({ mode }: { mode: "login" | "register" }) {
-  const router = useRouter();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [audience, setAudience] = useState<"student" | "admin">("student");
@@ -36,8 +34,8 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
       setError("Login succeeded, but the account role could not be determined.");
       return;
     }
-    // Replace the login route after the cookie is set; refreshing here can race the navigation.
-    router.replace(role === "admin" ? "/admin" : "/dashboard");
+    // Reload after the cookie is set so the destination reads the fresh session on the server.
+    window.location.assign(role === "admin" ? "/admin" : "/dashboard");
   }
 
   return (
