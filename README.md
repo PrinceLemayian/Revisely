@@ -1,5 +1,7 @@
 # Revisely
 
+> **⚠️ Note:** The Supabase project is currently paused, so the live deployment is not working at the moment. Run the app locally following the setup instructions below.
+
 Revisely is a hackathon-grade academic resource platform for smart campus services. It uses Next.js App Router and TypeScript because that keeps the UI, backend API routes, and server-rendered data flows in one coherent codebase. PostgreSQL plus Prisma gives the academic hierarchy real relational integrity, explicit indexes, and a clean path from keyword search to future vector search. The AI assistant is implemented behind provider and retrieval interfaces, so the MVP can run with the demo provider and switch to a real server-side OpenAI provider without rewriting the chat UI or database layer.
 
 ## Features
