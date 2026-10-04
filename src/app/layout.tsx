@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const siteTitle = "Revisely | Find it. Learn it. Ace it.";
 const siteDescription =
@@ -33,10 +34,15 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
-      <body>
-        <SiteHeader />
-        {children}
+    // suppressHydrationWarning: the ThemeProvider adds the 'dark' class on the
+    // client after reading localStorage, which creates an intentional mismatch
+    // with the server-rendered HTML. This attribute silences that one warning.
+    <html lang="en" suppressHydrationWarning>
+      <body className="bg-[#f7faf9] dark:bg-dark-bg dark:text-dark-text">
+        <ThemeProvider>
+          <SiteHeader />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

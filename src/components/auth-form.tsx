@@ -41,7 +41,7 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
   return (
     <form onSubmit={onSubmit} className="grid gap-5">
       {mode === "login" ? (
-        <div className="grid grid-cols-2 rounded-full bg-slate-100 p-1" role="tablist" aria-label="Login type">
+        <div className="grid grid-cols-2 rounded-full bg-slate-100 p-1 dark:bg-dark-bg" role="tablist" aria-label="Login type">
           {([
             ["student", "Student login", UserRound],
             ["admin", "Admin login", ShieldCheck]
@@ -52,7 +52,11 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
               role="tab"
               aria-selected={audience === value}
               onClick={() => setAudience(value)}
-              className={audience === value ? "focus-ring inline-flex h-10 items-center justify-center gap-2 rounded-full bg-white text-sm font-semibold text-spruce shadow-sm" : "focus-ring inline-flex h-10 items-center justify-center gap-2 rounded-full text-sm font-medium text-slate-500 hover:text-ink"}
+              className={
+                audience === value
+                  ? "focus-ring inline-flex h-10 items-center justify-center gap-2 rounded-full bg-white text-sm font-semibold text-spruce shadow-sm dark:bg-dark-surface dark:text-teal-400"
+                  : "focus-ring inline-flex h-10 items-center justify-center gap-2 rounded-full text-sm font-medium text-slate-500 hover:text-ink dark:text-slate-400 dark:hover:text-dark-text"
+              }
             >
               <Icon size={16} /> {label}
             </button>
@@ -60,15 +64,21 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
         </div>
       ) : null}
       {mode === "register" ? (
-        <>
-          <label className="grid gap-2 text-sm font-medium">Name<Input name="name" required minLength={2} /></label>
-        </>
+        <label className="grid gap-2 text-sm font-medium dark:text-dark-text">Name<Input name="name" required minLength={2} /></label>
       ) : null}
-      <label className="grid gap-2 text-sm font-medium">Email<Input name="email" type="email" required /></label>
-      <label className="grid gap-2 text-sm font-medium">Password<Input name="password" type="password" required minLength={8} /></label>
-      {mode === "login" ? <div className="flex justify-end"><Link href="mailto:support@revisely.test?subject=Password%20reset%20request" className="text-sm font-semibold text-spruce hover:text-teal-800">Forgot password?</Link></div> : null}
-      {error ? <p className="rounded-md bg-red-50 p-3 text-sm text-red-700">{error}</p> : null}
-      <Button type="submit" disabled={loading} className="h-12">{loading ? "Please wait..." : mode === "login" ? <>Log in <ArrowRight size={17} /></> : "Create account"}</Button>
+      <label className="grid gap-2 text-sm font-medium dark:text-dark-text">Email<Input name="email" type="email" required /></label>
+      <label className="grid gap-2 text-sm font-medium dark:text-dark-text">Password<Input name="password" type="password" required minLength={8} /></label>
+      {mode === "login" ? (
+        <div className="flex justify-end">
+          <Link href="mailto:support@revisely.test?subject=Password%20reset%20request" className="text-sm font-semibold text-spruce hover:text-teal-800 dark:hover:text-teal-400">
+            Forgot password?
+          </Link>
+        </div>
+      ) : null}
+      {error ? <p className="rounded-md bg-red-50 p-3 text-sm text-red-700 dark:bg-red-900/30 dark:text-red-400">{error}</p> : null}
+      <Button type="submit" disabled={loading} className="h-12">
+        {loading ? "Please wait..." : mode === "login" ? <>Log in <ArrowRight size={17} /></> : "Create account"}
+      </Button>
     </form>
   );
 }

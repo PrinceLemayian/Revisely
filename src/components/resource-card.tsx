@@ -13,21 +13,21 @@ export function ResourceCard({ resource }: Props) {
   const uploadedDate = new Intl.DateTimeFormat("en-KE", { day: "numeric", month: "short", year: "numeric" }).format(new Date(resource.createdAt));
 
   return (
-    <article className="group rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-teal-200 hover:shadow-soft">
+    <article className="group rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-teal-200 hover:shadow-soft dark:border-dark-border dark:bg-dark-surface dark:hover:border-teal-700">
       <div className="flex items-start gap-3">
-        <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-mint text-spruce transition group-hover:bg-spruce group-hover:text-white">
+        <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-mint text-spruce transition group-hover:bg-spruce group-hover:text-white dark:bg-teal-900/40 dark:text-teal-400 dark:group-hover:bg-spruce dark:group-hover:text-white">
           <FileIcon size={20} aria-hidden="true" />
         </div>
         <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-500">
+          <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
             <span>{resource.unit.code}</span>
             <span>{resource.resourceType.name}</span>
             <span>{resource.academicYear.label}</span>
             {resource.semester ? <span>{resource.semester.name}</span> : null}
           </div>
-          <h3 className="mt-1 text-base font-semibold text-ink">{resource.title}</h3>
-          <p className="mt-2 line-clamp-2 text-sm text-slate-600">{resource.description}</p>
-          <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-slate-500">
+          <h3 className="mt-1 text-base font-semibold text-ink dark:text-dark-text">{resource.title}</h3>
+          <p className="mt-2 line-clamp-2 text-sm text-slate-600 dark:text-slate-400">{resource.description}</p>
+          <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-slate-500 dark:text-slate-500">
             <span>{resource.school.name}</span>
             <span>{formatBytes(resource.fileSizeBytes)}</span>
             <span className="inline-flex items-center gap-1"><CalendarDays size={14} /> {uploadedDate}</span>

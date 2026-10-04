@@ -2,6 +2,7 @@ import type { Config } from "tailwindcss";
 
 const config: Config = {
   content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
+  darkMode: "class",
   theme: {
     extend: {
       colors: {
@@ -11,7 +12,12 @@ const config: Config = {
         navy: "#092f3b",
         mint: "#e7f6f2",
         coral: "#d95f4c",
-        amberline: "#f5b84b"
+        amberline: "#f5b84b",
+        // Dark mode surface tokens
+        "dark-bg": "#0d1b22",
+        "dark-surface": "#152028",
+        "dark-border": "#1e3040",
+        "dark-text": "#e2eaed"
       },
       boxShadow: {
         soft: "0 16px 40px rgba(23, 32, 38, 0.08)"

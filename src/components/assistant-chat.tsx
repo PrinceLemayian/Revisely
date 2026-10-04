@@ -44,36 +44,51 @@ export function AssistantChat({ initialQuestion = "" }: { initialQuestion?: stri
   }
 
   return (
-    <div className="grid min-h-[680px] grid-rows-[1fr_auto] rounded-lg border border-slate-200 bg-white shadow-soft">
+    <div className="grid min-h-[680px] grid-rows-[1fr_auto] rounded-lg border border-slate-200 bg-white shadow-soft dark:border-dark-border dark:bg-dark-surface">
       <div className="space-y-4 overflow-y-auto p-4">
         {messages.length === 0 ? (
           <div className="grid h-full place-items-center text-center">
             <div>
-              <div className="mx-auto grid h-12 w-12 place-items-center rounded-md bg-teal-50 text-spruce"><Bot /></div>
-              <h2 className="mt-4 text-xl font-semibold">Ask for a real resource</h2>
-              <p className="mt-2 max-w-md text-sm text-slate-600">Try “Do you have a 2024 Database Systems past paper?” The assistant retrieves database rows before answering.</p>
+              <div className="mx-auto grid h-12 w-12 place-items-center rounded-md bg-teal-50 text-spruce dark:bg-teal-900/40 dark:text-teal-400">
+                <Bot />
+              </div>
+              <h2 className="mt-4 text-xl font-semibold dark:text-dark-text">Ask for a real resource</h2>
+              <p className="mt-2 max-w-md text-sm text-slate-600 dark:text-slate-400">
+                Try "Do you have a 2024 Database Systems past paper?" The assistant retrieves database rows before answering.
+              </p>
             </div>
           </div>
         ) : null}
         {messages.map((message, index) => (
-          <div key={index} className={message.role === "user" ? "ml-auto max-w-2xl rounded-lg bg-spruce p-4 text-white" : "max-w-3xl rounded-lg bg-slate-50 p-4 text-ink"}>
+          <div
+            key={index}
+            className={
+              message.role === "user"
+                ? "ml-auto max-w-2xl rounded-lg bg-spruce p-4 text-white"
+                : "max-w-3xl rounded-lg bg-slate-50 p-4 text-ink dark:bg-dark-bg dark:text-dark-text"
+            }
+          >
             <p className="text-sm leading-6">{message.content}</p>
             {message.resources?.length ? (
               <div className="mt-3 grid gap-2">
                 {message.resources.map((resource) => (
-                  <Link key={resource.id} href={resource.detailUrl} className="rounded-md border border-slate-200 bg-white p-3 text-sm text-ink hover:border-spruce">
+                  <Link
+                    key={resource.id}
+                    href={resource.detailUrl}
+                    className="rounded-md border border-slate-200 bg-white p-3 text-sm text-ink hover:border-spruce dark:border-dark-border dark:bg-dark-surface dark:text-dark-text dark:hover:border-spruce"
+                  >
                     <span className="block font-semibold">{resource.title}</span>
-                    <span className="text-xs text-slate-500">{resource.unit.code} · {resource.resourceType.name} · {resource.academicYear.label}</span>
+                    <span className="text-xs text-slate-500 dark:text-slate-400">{resource.unit.code} · {resource.resourceType.name} · {resource.academicYear.label}</span>
                   </Link>
                 ))}
               </div>
             ) : null}
           </div>
         ))}
-        {loading ? <p className="text-sm text-slate-500">Searching the catalog...</p> : null}
-        {error ? <p className="rounded-md bg-red-50 p-3 text-sm text-red-700">{error}</p> : null}
+        {loading ? <p className="text-sm text-slate-500 dark:text-slate-400">Searching the catalog...</p> : null}
+        {error ? <p className="rounded-md bg-red-50 p-3 text-sm text-red-700 dark:bg-red-900/30 dark:text-red-400">{error}</p> : null}
       </div>
-      <form onSubmit={send} className="flex gap-3 border-t border-slate-200 p-4">
+      <form onSubmit={send} className="flex gap-3 border-t border-slate-200 p-4 dark:border-dark-border">
         <Input value={value} onChange={(event) => setValue(event.target.value)} placeholder="Ask about a unit, paper, CAT, or year" />
         <Button type="submit" disabled={loading}><Send size={17} /> Send</Button>
       </form>

@@ -1,8 +1,8 @@
- import { InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes } from "react";
+import { InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes } from "react";
 import { clsx } from "clsx";
 
 const fieldClass =
-  "focus-ring h-11 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-ink placeholder:text-slate-400 transition focus:border-spruce";
+  "focus-ring h-11 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-ink placeholder:text-slate-400 transition focus:border-spruce dark:border-dark-border dark:bg-dark-surface dark:text-dark-text dark:placeholder:text-slate-500 dark:focus:border-spruce";
 
 export function Input(props: InputHTMLAttributes<HTMLInputElement>) {
   return <input {...props} className={clsx(fieldClass, props.className)} />;
@@ -15,4 +15,3 @@ export function Select(props: SelectHTMLAttributes<HTMLSelectElement>) {
 export function Textarea(props: TextareaHTMLAttributes<HTMLTextAreaElement>) {
   return <textarea {...props} className={clsx("min-h-28 py-3", fieldClass, props.className)} />;
 }
-
